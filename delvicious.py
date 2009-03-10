@@ -55,44 +55,41 @@ class Search(webapp.RequestHandler):
     print ''
     print 'Hello, world!'
 
+
+class RSSFeedHandler(webapp.RequestHandler):
+    def searchHTTP (self, username, password):
+        #url = 'https://' + username + ':' + password + '@api.del.icio.us/v1/posts/all'
+        #url = 'http://lehrblogger.com/nyu/classes/spring09/a2z/midterm/testing.xml'
+        url = 'https://memento85:ont9oth1ag6foc@api.del.icio.us/v1/posts/all'
+    
+        #unpw = base64.b64encode("memento85:ont9oth1ag6foc")'
+        res = urlfetch.fetch('https://api.del.icio.us/v1/posts/all', 
+                         headers={'Authorization': 'Basic ' + base64.b64encode("memento85:ont9oth1ag6foc")},
+                         allow_truncated=True)
+        res = urlfetch.fetch('http://lehrblogger.com/nyu/classes/spring09/a2z/midterm/testing.xml')                 
+        print res.content
+        dom = parseString(res.content.partition('<!--')[0])
+        return dom.getElementsByTagName('post')
+  
+    def get(self):
+        bookmarks = self.searchHTTP('memento85', 'ont9oth1ag6foc') #get these later from datastore, they are being irgnored right now
+        self.response.headers['Content-Type'] = 'text/xml'
+
+        template_vars = {'bookmarks' : articles}
+        path = os.path.join(os.path.dirname(__file__), self.get_template('annotations.xml'))
+
+        self.response.out.write(template.render(path, template_vars))
+
+
+
+
+
 application = webapp.WSGIApplication(
                                      [('/', FrontPage),
                                       ('/register', Register),
-                                      ('/search', Search)],
+                                      ('/search', Search),
+                                      ('/annotations/(.*)', RSSFeedHandler)],
                                      debug=True)
-    
-class RSSFeedHandler(webapp.RequestHandler):
-  def searchHTTP (self, username, password):
-    #url = 'https://' + username + ':' + password + '@api.del.icio.us/v1/posts/all'
-    #url = 'http://lehrblogger.com/nyu/classes/spring09/a2z/midterm/testing.xml'
-    url = 'https://memento85:ont9oth1ag6foc@api.del.icio.us/v1/posts/all'
-    
-    #unpw = base64.b64encode("memento85:ont9oth1ag6foc")'
-    res = urlfetch.fetch('https://api.del.icio.us/v1/posts/all', 
-                         headers={'Authorization': 'Basic ' + base64.b64encode("memento85:ont9oth1ag6foc")},
-                         allow_truncated=True)
-    res = urlfetch.fetch('http://lehrblogger.com/nyu/classes/spring09/a2z/midterm/testing.xml')                 
-    print res.content
-    dom = parseString(res.content.partition('<!--')[0])
-    return dom.getElementsByTagName('post')
-  
-  def get(self):
-        bookmarks = self.searchHTTP('memento85', 'ont9oth1ag6foc') #get these later from datastore, they are being irgnored right now
-        self.response.headers['Content-Type'] = 'text/xml'
-        self.response.out.write(self.render_annotations(bookmarks,
-                                                     self.request,
-                                                     [],
-                                                     'annotations.xml'))
-
-class AnnotationsHandler(webapp.RequestHandler):
-    def render_annotations(self,
-                        bookmarks,
-                        template_name):
-                        
-        template_variables = {'bookmarks' : articles}
-        
-        return template.render(self.get_template(template_name), template_vars)
-
 
 def main():
   run_wsgi_app(application)

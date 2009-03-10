@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Annotations>
-    {% for article in articles %}
-	<Annotation about="{{ article.url }}">
+    {% for bookmark in bookmarks %}
+	<Annotation about="{{ bookmark }}">
 		<Label name="_cse_kucrzepmu5o"/>
 	</Annotation>
     {% endfor %}
