@@ -1,0 +1,13 @@
+application: delv-icio-us
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /.*
+  script: delvicious.py
+  login: required
+  secure: always
+
+- url: /annotations
+  static_dir: static/annotations
