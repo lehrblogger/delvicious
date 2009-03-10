@@ -44,8 +44,8 @@ class Register(webapp.RequestHandler):
     delviciousUser.dpassword = self.request.get('dpassword')
     delviciousUser.put()
     
-    updateObj = Updater()
-    updateObj.updateAnnotations(self.request.get('daccount'), self.request.get('dpassword'))
+    #updateObj = Updater()
+    #updateObj.updateAnnotations(self.request.get('daccount'), self.request.get('dpassword'))
     
     self.redirect('/search')
 
@@ -60,40 +60,6 @@ application = webapp.WSGIApplication(
                                       ('/register', Register),
                                       ('/search', Search)],
                                      debug=True)
-    
-class Updater(webapp.RequestHandler):
-  def searchHTTP (self, username, password):
-    #url = 'https://' + username + ':' + password + '@api.del.icio.us/v1/posts/all'
-    #url = 'http://lehrblogger.com/nyu/classes/spring09/a2z/midterm/testing.xml'
-    url = 'https://memento85:ont9oth1ag6foc@api.del.icio.us/v1/posts/all'
-    
-    #unpw = base64.b64encode("memento85:ont9oth1ag6foc")'
-    res = urlfetch.fetch('https://api.del.icio.us/v1/posts/all', 
-                         headers={'Authorization': 'Basic ' + base64.b64encode("memento85:ont9oth1ag6foc")},
-                         allow_truncated=True)
-    res = urlfetch.fetch('http://lehrblogger.com/nyu/classes/spring09/a2z/midterm/testing.xml')                 
-    print res.content
-    dom = parseString(res.content.partition('<!--')[0])
-    return dom.getElementsByTagName('post')
-  
-  def updateAnnotations(self, username='', password='' ):
-    bookmarks = self.searchHTTP(username, password)
-
-    f = open('/annotations/' + username + '.xml')
-
-    f.write('<Annotations>\n')
-    f.write('\n')
-
-    for bookmark in bookmarks:
-      f.write('\t<Annotation about="' + bookmark.getAttribute('href').replace( '&', '&amp;')+ '">\n')
-      f.write('\t\t<Label name="_cse_kucrzepmu5o"/>\n') #old v0.1
-      f.write('\t\t<Label name="_cse_sfvuwbcplki"/>\n') #v0.2
-      f.write('\t\t<Label name="_cse_k4ronzyjnvs"/>\n') #v0.3
-      f.write('\t</Annotation>\n')
-      f.write('\n')
-	
-    f.write('</Annotations>')
-    f.close()
     
 class RSSFeedHandler(AnnotationsHandler):
   def searchHTTP (self, username, password):
