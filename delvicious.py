@@ -50,10 +50,8 @@ class Register(webapp.RequestHandler):
     self.redirect('/search')
 
 class Search(webapp.RequestHandler):
-  def post(self):
-    print 'Content-Type: text/plain'
-    print ''
-    print 'Hello, world!'
+  def get(self):
+    self.response.out.write('Search page')
 
 
 class RSSFeedHandler(webapp.RequestHandler):
@@ -67,16 +65,15 @@ class RSSFeedHandler(webapp.RequestHandler):
                          headers={'Authorization': 'Basic ' + base64.b64encode("memento85:ont9oth1ag6foc")},
                          allow_truncated=True)
         res = urlfetch.fetch('http://lehrblogger.com/nyu/classes/spring09/a2z/midterm/testing.xml')                 
-        print res.content
         dom = parseString(res.content.partition('<!--')[0])
         return dom.getElementsByTagName('post')
   
-    def get(self):
+    def get(self, testarg):
         bookmarks = self.searchHTTP('memento85', 'ont9oth1ag6foc') #get these later from datastore, they are being irgnored right now
         self.response.headers['Content-Type'] = 'text/xml'
 
-        template_vars = {'bookmarks' : articles}
-        path = os.path.join(os.path.dirname(__file__), self.get_template('annotations.xml'))
+        template_vars = {'bookmarks' : bookmarks}
+        path = os.path.join(os.path.dirname(__file__), 'annotations.xml')
 
         self.response.out.write(template.render(path, template_vars))
 
