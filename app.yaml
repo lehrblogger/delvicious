@@ -5,9 +5,7 @@ api_version: 1
 
 handlers:
 - url: /.*
-  script: delvicious.py
-  login: required
-  secure: always
+  script: delvicious.py 
 
 - url: /annotations
   static_dir: static/annotations
