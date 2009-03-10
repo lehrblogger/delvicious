@@ -61,7 +61,7 @@ application = webapp.WSGIApplication(
                                       ('/search', Search)],
                                      debug=True)
     
-class RSSFeedHandler(AnnotationsHandler):
+class RSSFeedHandler(webapp.RequestHandler):
   def searchHTTP (self, username, password):
     #url = 'https://' + username + ':' + password + '@api.del.icio.us/v1/posts/all'
     #url = 'http://lehrblogger.com/nyu/classes/spring09/a2z/midterm/testing.xml'
@@ -82,7 +82,7 @@ class RSSFeedHandler(AnnotationsHandler):
         self.response.out.write(self.render_annotations(bookmarks,
                                                      self.request,
                                                      [],
-                                                     'memento85.xml'))
+                                                     'annotations.xml'))
 
 class AnnotationsHandler(webapp.RequestHandler):
     def render_annotations(self,

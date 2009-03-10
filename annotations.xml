@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Annotations>
+    {% for article in articles %}
+	<Annotation about="{{ article.url }}">
+		<Label name="_cse_kucrzepmu5o"/>
+	</Annotation>
+    {% endfor %}
+</Annotations>
