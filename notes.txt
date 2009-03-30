@@ -1,3 +1,7 @@
+*****Notes to Self*****
+
+
+
 refinements with tags
 
 weight based on number of other users who have bookmarked!
