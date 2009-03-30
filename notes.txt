@@ -1,0 +1,36 @@
+refinements with tags
+
+weight based on number of other users who have bookmarked!
+
+
+first step - get user info
+
+
+get delicious login, store with user
+store urls in datastore with tags (and num users - might need to update with full http pull)
+publish urls as RSS feed - http://brizzled.clapper.org/id/77 
+
+each user last a list of lists
+each lists has a title, url, list of tags that are all strings so its ok
+
+find a way to store xml file
+fnd a way to access xml file
+
+World of Bookmarks http://appgallery.appspot.com/about_app?app_id=agphcHBnYWxsZXJ5chQLEgxBcHBsaWNhdGlvbnMY54wBDA
+
+http://delicious.com/help/api#posts_all
+
+
+trunk/indexed-cached-zipserve: Allows serving static files from zip files. Uses memcache to increase performance. It performs best when files zipped in alphabetical order so the handler can easily determine which zip file a given url is in.
+
+http://groups.google.com/group/google-appengine/browse_thread/thread/2b8416bac5bbd495/fca839300a515524?lnk=gst&q=write+static+file#fca839300a515524
+
+http://code.google.com/p/google-app-engine-samples/source/browse/trunk/indexed-cached-zipserve/memcache_zipserve.py
+
+
+
+
+i dont need a cron job checking for new bookmarks
+i can just check for new ones every time the xml is served
+that saves a huge amount of pain
+i dont think app engine supports cron jobs'
