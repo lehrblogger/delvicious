@@ -1,0 +1,16 @@
+<html>
+<head>
+</head>
+<body>
+<div class="login">
+  {% if user.is_authenticated %}
+    Welcome, {{ user.username }}
+    {% if user.is_active %} <a href="/guestbook/logout"> 
+	{% else %} <a href="{% google_logout_url "/guestbook/" %}">
+	{% endif %}Logout</a>
+  {% else %}
+    <a href="{% google_login_url request.get_full_path %}">Login</a>
+  {% endif %}
+</div>
+</body>
+</html>

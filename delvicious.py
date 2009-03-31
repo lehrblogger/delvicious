@@ -1,5 +1,3 @@
-#//small comment to test commit from new location
-
 import cgi, os, base64
 from xml.dom.minidom import parse, parseString
 from google.appengine.api import urlfetch
@@ -10,11 +8,11 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
 
-class DelviciousUser(db.Model):
-  gaccount = db.UserProperty()
-  daccount = db.StringProperty(multiline=False)
-  dpassword = db.StringProperty(multiline=False)
-  date = db.DateTimeProperty(auto_now_add=True)
+#class DelviciousUser(db.Model):
+#  gaccount = db.UserProperty()
+#  daccount = db.StringProperty(multiline=False)
+#  dpassword = db.StringProperty(multiline=False)
+#  date = db.DateTimeProperty(auto_now_add=True)
 
 class FrontPage(webapp.RequestHandler):
   def get(self):

@@ -1,0 +1,22 @@
+<html>
+<head>
+</head>
+<body>
+<div class="login">
+  {% if user.is_authenticated %}
+    Welcome, {{ user.username }}
+    {% if user.is_active %} <a href="/guestbook/logout"> 
+	{% else %} <a href="{% google_logout_url "/guestbook/" %}">
+	{% endif %}Logout</a>
+  {% else %}
+    <a href="{% google_login_url request.get_full_path %}">Login with your Google account</a><br>
+    <a href="/guestbook/login">Login with your normal account</a><br>
+    <a href="/guestbook/signup">Sign up</a><br>
+  {% endif %}
+</div>
+{% for object in object_list %}
+  <p>{{object.author.username}}: {{object.content}}</p>
+{% endfor %}
+<a href="/guestbook/sign/">Add entry</a>
+</body>
+</html>
