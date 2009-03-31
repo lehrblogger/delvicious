@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Add Delicious Account{% endblock %}
+
+{% block content %}
+<h1>Add Delicious Account</h1>
+
+<form action="" method="post" enctype="multipart/form-data">
+  <table>
+    {{ form.as_table }}
+    <tr><td colspan="2">
+      <input type="submit"
+        value="{% if object %}Apply changes{% else %}Create{% endif %}" />
+    </td></tr>
+  </table>
+</form>
+{% endblock %}

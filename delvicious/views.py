@@ -3,6 +3,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 
+from delvicious.forms import AddDeliciousAccountForm
+
+    
 def create_new_user(request):
     form = UserCreationForm()
     # if form was submitted, bind form instance.
@@ -20,11 +23,38 @@ def create_new_user(request):
 from django.views.generic.list_detail import object_list
 from django.views.generic.create_update import create_object
 from django.contrib.auth.decorators import login_required
-from delvicious.models import Greeting
 
-def list_entries(request):
-    return object_list(request, Greeting.all())
+from delvicious.models import DeliciousAccount
 
+
+
+#@login_required
+def search(request):
+	return object_list(request, DeliciousAccount.all())
+	#return render_to_response('delvicious/search.html')
+	
+
+#maybe not two of this line?
+@login_required
+def add_delicious_account(request):
+
+    form = AddDeliciousAccountForm()
+    # if form was submitted, bind form instance.
+    if request.method == 'POST':
+        form = AddDeliciousAccountForm(request.POST)
+        if form.is_valid():
+            new_delicious_account = form.save()
+            new_delicious_account.put()
+            return HttpResponseRedirect('/delvicious/search/')
+    return render_to_response('delvicious/add_delicious_account_form.html', {'form': form})
+
+
+	
+
+#unused below this line
+
+    
+    
 @login_required
 def create_entry(request):
     # Add username to POST data, so it gets set in the created model
@@ -32,3 +62,4 @@ def create_entry(request):
     request.POST = request.POST.copy()
     request.POST['author'] = str(request.user.key())
     return create_object(request, Greeting, post_save_redirect='/delvicious')
+    

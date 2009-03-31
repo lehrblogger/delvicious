@@ -1,0 +1,13 @@
+<html>
+<head>
+</head>
+<body>
+<div>
+	[search box here]
+  
+	{% for object in object_list %}
+		<p>{{object.user.username}}: {{object.username | object.password}}</p>
+	{% endfor %}
+</div>
+</body>
+</html>

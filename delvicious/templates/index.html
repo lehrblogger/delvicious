@@ -5,9 +5,13 @@
 <div class="login">
   {% if user.is_authenticated %}
     Welcome, {{ user.username }}
-    <a href="{% google_logout_url "/delvicious/" %}">Logout</a>
+    (<a href="{% google_logout_url "/delvicious/" %}">Logout</a>)
+	<br/>
+	<br/>
+	<a href="/delvicious/add_delicious_account/">Add Delicious Account</a><br/>
+	<a href="/delvicious/fetch_bookmarks/">Fetch Bookmarks</a> for first Delicious account
   {% else %}
-    <a href="{% google_login_url request.get_full_path %}">Login</a>
+    <a href="{% google_login_url request.get_full_path %}">Login</a> with your Google account and then add a Delicious account.
   {% endif %}
 </div>
 </body>

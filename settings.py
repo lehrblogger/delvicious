@@ -69,7 +69,7 @@ GLOBALTAGS = (
 LOGIN_URL = '/delvicious/login'
 #LOGOUT_URL = '/account/logout/'
 LOGOUT_URL = '/delvicious/logout/'
-LOGIN_REDIRECT_URL = '/delvicious/'
+LOGIN_REDIRECT_URL = '/delvicious/add_delicious_account'
 
 INSTALLED_APPS = (
     'django.contrib.auth',
