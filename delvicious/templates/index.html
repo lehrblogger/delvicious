@@ -1,0 +1,14 @@
+<html>
+<head>
+</head>
+<body>
+<div class="login">
+  {% if user.is_authenticated %}
+    Welcome, {{ user.username }}
+    <a href="{% google_logout_url "/delvicious/" %}">Logout</a>
+  {% else %}
+    <a href="{% google_login_url request.get_full_path %}">Login</a>
+  {% endif %}
+</div>
+</body>
+</html>

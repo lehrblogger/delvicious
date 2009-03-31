@@ -37,13 +37,13 @@ MIDDLEWARE_CLASSES = (
     
     # Django authentication
     #'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # Replace Django's AuthenticationMiddleware with HybridAuthenticationMiddleware.
-	'ragendja.auth.middleware.HybridAuthenticationMiddleware',
 	
     # Google authentication
-    #'ragendja.auth.middleware.GoogleAuthenticationMiddleware',
+    'ragendja.auth.middleware.GoogleAuthenticationMiddleware',
+    
     # Hybrid Django/Google authentication
     #'ragendja.auth.middleware.HybridAuthenticationMiddleware',
+    
     'django.middleware.common.CommonMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'ragendja.sites.dynamicsite.DynamicSiteIDMiddleware',
@@ -66,10 +66,10 @@ GLOBALTAGS = (
 )
 
 #LOGIN_URL = '/account/login/'
-LOGIN_URL = '/guestbook/login'
+LOGIN_URL = '/delvicious/login'
 #LOGOUT_URL = '/account/logout/'
-LOGOUT_URL = '/guestbook/logout/'
-LOGIN_REDIRECT_URL = '/guestbook/'
+LOGOUT_URL = '/delvicious/logout/'
+LOGIN_REDIRECT_URL = '/delvicious/'
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -82,7 +82,7 @@ INSTALLED_APPS = (
     'appenginepatcher',
     'registration',
     'mediautils',
-    'guestbook',
+    'delvicious',
 )
 
 # List apps which should be left out from app settings and urlsauto loading
