@@ -51,10 +51,10 @@ import base64
 from google.appengine.api import users, urlfetch
 from xml.dom.minidom import parse, parseString
 def searchHTTP (username, password):
-# 	res = urlfetch.fetch('https://api.del.icio.us/v1/posts/all', 
-#  						 headers={'Authorization': 'Basic ' + base64.b64encode(username + ":" + password)},
-#  						 allow_truncated=True)
-	res = urlfetch.fetch('http://lehrblogger.com/nyu/classes/spring09/a2z/midterm/testing.xml')
+	res = urlfetch.fetch('https://api.del.icio.us/v1/posts/all', 
+ 						 headers={'Authorization': 'Basic ' + base64.b64encode(username + ":" + password)},
+ 						 allow_truncated=True)
+#	res = urlfetch.fetch('http://lehrblogger.com/nyu/classes/spring09/a2z/midterm/testing.xml')
 	if res.content.find('Sorry, Unable to process request at this time -- error 999.') != -1:
 		return
 	else:
