@@ -1,0 +1,15 @@
+{% extends "delvicious/base_user.html" %}
+
+{% block welcome %}
+<div class="login">
+  Great! {{ user }} can now get bookmarks from <em>{{daccount.username}}</em>
+  <br/>
+  <br/>
+  Now, go <a href="/delvicious/fetch_bookmarks/">fetch your bookmarks</a>
+
+</div>
+{% endblock %}
+
+{% block links %}
+{% endblock %}
+

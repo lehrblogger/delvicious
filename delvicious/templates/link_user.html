@@ -1,0 +1,16 @@
+{% extends "delvicious/base_user.html" %}
+
+{% block welcome %}
+<div class="login">
+  Bookmarks for {{ user }} (<a href="{% google_logout_url "/delvicious/" %}">Logout</a>)
+</div>
+{% endblock %}
+
+{% block links %}
+<div>
+	{% for link in links %}
+		<p>user:{{link.user}}   <a href="{{link.url}}">{{link.title}}</a></p>
+	{% endfor %}
+</div>
+{% endblock %}
+

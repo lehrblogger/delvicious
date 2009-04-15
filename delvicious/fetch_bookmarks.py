@@ -8,6 +8,8 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
 
+from delvicious.models import DeliciousAccount
+
 def searchHTTP (self, username, password):
 	res = urlfetch.fetch('https://api.del.icio.us/v1/posts/all', 
  						 headers={'Authorization': 'Basic ' + base64.b64encode(username + ":" + password)},
@@ -19,13 +21,15 @@ def searchHTTP (self, username, password):
 	else:
 		dom = parseString(res.content.partition('<!--')[0])
 		return dom.getElementsByTagName('post')
-  
+
+
 def getBookmarksAndStore(self):
 	user = users.get_current_user()
 	
-    if user:
-		delicious_login = DeliciousLogin.gql("WHERE user = :user", user=users.get_current_user())
+	if user:
+		delicious_login = DeliciousAccount.gql("WHERE user = :user", user=users.get_current_user())
 	
+		return render_to_response('delvicious/user_create_form.html', {'form': form})
 		if delicious_login:
 			#bookmarks = self.searchHTTP(delicious_login.username, delicious_login.password)
 			#for bookmark in bookmarks
@@ -35,14 +39,11 @@ def getBookmarksAndStore(self):
 		else:
 			self.response.headers['Content-Type'] = 'text/plain'
 			self.response.out.write('delicious_login fail')
-    else:
+	else:
 		self.response.headers['Content-Type'] = 'text/plain'
 		self.response.out.write('user fail')
       #self.redirect(users.create_login_url(self.request.uri))
 
-
-
-getBookmarksAndStore
 
 
 def get(self, testarg):
@@ -55,3 +56,8 @@ def get(self, testarg):
 	path = os.path.join(os.path.dirname(__file__), 'annotations.xml')
         
 	self.response.out.write(template.render(path, template_vars))
+
+
+
+getBookmarksAndStore
+

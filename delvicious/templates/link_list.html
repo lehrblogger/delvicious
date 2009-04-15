@@ -1,0 +1,13 @@
+<html>
+<head>
+</head>
+<body>
+<div>
+	All Links
+	
+	{% for object in object_list %}
+		<p>user:{{object.user}}   <a href="{{object.url}}">{{object.title}}</a></p>
+	{% endfor %}
+</div>
+</body>
+</html>
