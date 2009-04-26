@@ -16,6 +16,24 @@ from ragendja.forms import FormWithSets, FormSetField
 from google.appengine.api import users, urlfetch
 from delvicious.models import User
 
+
+
+class UserLoginForm(forms.ModelForm):
+	username = forms.RegexField(regex=r'^\w+$', max_length=30,
+		label=_(u'Delicious username'))
+	password = forms.CharField(widget=forms.PasswordInput(render_value=False),
+		label=_(u'Delicious password'))
+		
+	def clean_username(self):
+		"""
+		Validate that the username is in use.
+		
+		"""
+		user = User.gql("WHERE username = :1 ", self.cleaned_data['username'])
+		if not user:
+			raise forms.ValidationError(__(u'That is not a valid username.'))
+		return self.cleaned_data['username']
+
 class UserCreationForm(forms.ModelForm):
 	username = forms.RegexField(regex=r'^\w+$', max_length=30,
 		label=_(u'Username'))
@@ -25,8 +43,8 @@ class UserCreationForm(forms.ModelForm):
 		label=_(u'Password (again)'))
 	email = forms.EmailField(label=_(u'Email address'))
 	
-	last_updated = datetime.now()
-
+	last_updated = datetime.now() #TODO make sure this is changing from now
+	
 	def clean_username(self):
 		"""
 		Validate that the username is alphanumeric and is not already in use.
@@ -58,7 +76,7 @@ class UserCreationForm(forms.ModelForm):
 			dom = parseString(res.content.partition('<!--')[0])
 			nodes = dom.getElementsByTagName('update')
 			if nodes.length > 0:
-				last_updated = datetime.strptime(nodes[0].getAttribute('time'), "%Y-%m-%dT%H:%M:%SZ")
+				self.last_updated = datetime.strptime(nodes[0].getAttribute('time'), "%Y-%m-%dT%H:%M:%SZ")
 			else:
 				raise forms.ValidationError(__(res.content))
 		#https://memento85:ont9oth1ag6foc@api.del.icio.us/v1/posts/update
@@ -77,10 +95,21 @@ class UserCreationForm(forms.ModelForm):
 		supplied.
 		
 		"""
-		
-		new_user = User(username=self.cleaned_data['username'], email=self.cleaned_data['email'], last_updated=self.last_updated)
-		new_user.set_password(self.cleaned_data['password1'])
-		#new_delicious_account = DeliciousAccount(user = users.get_current_user(), username=self.cleaned_data['username'], password=self.cleaned_data['password1'])
-		#self.instance = new_delicious_account
+		new_user = User.objects.create_user(self.cleaned_data['username'], self.cleaned_data['email'], self.cleaned_data['password1'])
 		return new_user
-#		return super(UserRegistrationForm, self).save()
+		# 		
+		# 		new_user = RegistrationProfile.objects.create_inactive_user(
+		# 				username=self.cleaned_data['username'],
+		# 				email=self.cleaned_data['email'],
+		# 				password = self.cleaned_data['password1'],
+		# 				domain_override=domain_override)
+		#self.instance = new_user
+		#return super(UserRegistrationForm, self).save()
+        
+		# 		new_user = RegistrationProfile.objects.create_inactive_user(username=self.cleaned_data['username'],
+		# 																	email=self.cleaned_data['email'],
+		# 																	last_updated=self.last_updated)
+		
+		#new_user = User(username=self.cleaned_data['username'], email=self.cleaned_data['email'], last_updated=self.last_updated)
+		#new_user.set_password(self.cleaned_data['password1'])
+		#return new_user

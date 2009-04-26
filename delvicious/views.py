@@ -1,8 +1,10 @@
 from django.contrib.auth.models import User
 import base64
 from xml.dom.minidom import parse, parseString
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login
+#from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import check_password
 
 from django.views.generic.list_detail import object_list
 from django.views.generic.create_update import create_object
@@ -12,7 +14,7 @@ from django.http import HttpResponseRedirect
 from google.appengine.api import users, urlfetch
 from google.appengine.ext import db
 
-from delvicious.forms import UserCreationForm
+from delvicious.forms import UserCreationForm, UserLoginForm
 from delvicious.models import User, Link
 
 
@@ -35,11 +37,30 @@ def create_new_user(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            #user = form.instance
             # user must be active for login to work
             user.is_active = True
             user.put()
             return HttpResponseRedirect('/delvicious/')
     return render_to_response('delvicious/user_create_form.html', {'form': form})
+
+def login_user(request):
+    form = UserLoginForm()
+    # if form was submitted, bind form instance.
+    if request.method == 'POST':
+        form = UserLoginForm(request.POST)
+        if form.is_valid():
+			#query = User.gql("WHERE username = :1 ", request.POST['username'])
+			#stored_password = query.get().password
+			#return render_to_response('delvicious/text.html', {'text': request.POST['username'] + "  " + request.POST['password']})
+   			#if check_password(request.POST['password'], stored_password):	#form checks for valid user
+			user = authenticate(username=request.POST['username'], password=request.POST['password'])
+			if user is not None:
+				if user.is_active:
+					login(request, user)
+					return render_to_response('delvicious/text.html', {'text': 'login success'})
+					#TODO update on login, this is why i need to do manually
+    return render_to_response('delvicious/user_login_form.html', {'form': form})
 
 @login_required
 def fetch_bookmarks(request):

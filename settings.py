@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 from ragendja.settings_pre import *
 
+DEBUG = True
+
+
+
 # Increase this when you update your media on the production site, so users
 # don't have to refresh their cache. By setting this your MEDIA_URL
 # automatically becomes /media/MEDIA_VERSION/
@@ -67,10 +71,10 @@ GLOBALTAGS = (
 )
 
 #LOGIN_URL = '/account/login/'
-LOGIN_URL = '/delvicious/login/'
+#LOGIN_URL = '/delvicious/login/'  !!!!!!!!!!!! this was partially causing the strange "You've mistakenly set the password directly. Please use set_password() instead." problem
 #LOGOUT_URL = '/account/logout/'
-LOGOUT_URL = '/delvicious/logout/'
-LOGIN_REDIRECT_URL = '/delvicious/'
+#LOGOUT_URL = '/delvicious/logout/'
+#LOGIN_REDIRECT_URL = '/delvicious/'
 
 INSTALLED_APPS = (
     'django.contrib.auth',

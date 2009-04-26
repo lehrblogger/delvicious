@@ -1,11 +1,9 @@
-<html>
-<head>
-</head>
-<body>
-<div>
-	This is a generic text page
-	</br>
-	{{text}}
-</div>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+	This page is useful for debugging.
+	<br/>
+	<br/>
+	<br/>
+	{{ text }}
+{% endblock %}
