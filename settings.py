@@ -25,6 +25,7 @@ LANGUAGE_CODE = 'en'
 #    ('en', 'English'),
 #)
 
+
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.auth',
     'django.core.context_processors.media',
@@ -55,7 +56,7 @@ MIDDLEWARE_CLASSES = (
 #AUTH_USER_MODULE = 'ragendja.auth.google_models'
 #AUTH_ADMIN_MODULE = 'ragendja.auth.google_admin'
 # Hybrid Django/Google authentication
-#AUTH_USER_MODULE = 'delvicious.models'
+AUTH_USER_MODULE = 'delvicious.models'
 
 GLOBALTAGS = (
 	# Add google_login_url and google_logout_url tags
@@ -66,10 +67,10 @@ GLOBALTAGS = (
 )
 
 #LOGIN_URL = '/account/login/'
-LOGIN_URL = '/delvicious/login'
+LOGIN_URL = '/delvicious/login/'
 #LOGOUT_URL = '/account/logout/'
 LOGOUT_URL = '/delvicious/logout/'
-LOGIN_REDIRECT_URL = '/delvicious/add_delicious_account'
+LOGIN_REDIRECT_URL = '/delvicious/'
 
 INSTALLED_APPS = (
     'django.contrib.auth',

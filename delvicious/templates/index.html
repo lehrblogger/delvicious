@@ -6,13 +6,13 @@
     Welcome, {{ user.username }}
     (<a href="{% google_logout_url "/delvicious/" %}">Logout</a>)
     <br/>
-    <br/>
-	First, <a href="/delvicious/add_delicious_account/">add a Delicious account</a><br/>
+    <br/>s
+	Search
   {% else %}
     <a href="/delvicious/signup">Signup</a> with your Delicious username and password.
     <br/>
     <br/>
-    <a href="/delvicious/login">Login</a> if you've already signed up.
+	<a href="{% url django.contrib.auth.views.login %}?redirect_to={{ request.get_full_path|urlencode }}">Login</a> if you've already signed up.
     <br/>
     <br/>
     <a href="">Request</a> a password reset link if you've changed your Delicious password.

@@ -4,11 +4,6 @@ from ragendja.auth.models import User
 class User(User):
     last_updated = db.DateTimeProperty()
 
-class DeliciousAccount(db.Model):
-	user = db.UserProperty()
-	username = db.StringProperty()
-	password = db.StringProperty()
-
 class Link(db.Model):
 	#user = db.ReferenceProperty(User, collection_name='user_links')
 	user = db.UserProperty()

@@ -1,22 +1,20 @@
-# -*- coding: utf-8 -*-
-from django import forms
-#from django.contrib.auth.models import User
-from django.core.files.uploadedfile import UploadedFile
-from django.utils.translation import ugettext_lazy as _, ugettext as __
-from ragendja.auth.models import UserTraits
-from ragendja.forms import FormWithSets, FormSetField
-from registration.forms import RegistrationForm, RegistrationFormUniqueEmail
-from registration.models import RegistrationProfile
-from google.appengine.api import users
-
-
-from delvicious.models import User
-
 import base64
-from google.appengine.api import urlfetch
-from xml.dom.minidom import parse, parseString
 
 from datetime import datetime
+from xml.dom.minidom import parse, parseString
+from registration.forms import RegistrationForm, RegistrationFormUniqueEmail
+from registration.models import RegistrationProfile
+
+from django import forms
+from django.core.files.uploadedfile import UploadedFile
+from django.utils.translation import ugettext_lazy as _, ugettext as __
+#from django.contrib.auth.models import User
+
+from ragendja.auth.models import UserTraits
+from ragendja.forms import FormWithSets, FormSetField
+
+from google.appengine.api import users, urlfetch
+from delvicious.models import User
 
 class UserCreationForm(forms.ModelForm):
 	username = forms.RegexField(regex=r'^\w+$', max_length=30,
@@ -52,10 +50,10 @@ class UserCreationForm(forms.ModelForm):
 				raise forms.ValidationError(__(u'You must type the same password each time'))
 				
 		if 'username' in self.cleaned_data and 'password1' in self.cleaned_data and 'password2' in self.cleaned_data and 'email' in self.cleaned_data:
-			username = self.cleaned_data['username'] #'memento85'
-			password = self.cleaned_data['password1'] #'ont9oth1ag6foc'
+			temp_username = self.cleaned_data['username'] #'memento85'
+			temp_password = self.cleaned_data['password1'] #'ont9oth1ag6foc'
 			res = urlfetch.fetch('https://api.del.icio.us/v1/posts/update', 
- 						 headers={'Authorization': 'Basic ' + base64.b64encode(username+ ":" + password)},
+ 						 headers={'Authorization': 'Basic ' + base64.b64encode(temp_username+ ":" + temp_password)},
  						 allow_truncated=True)
 			dom = parseString(res.content.partition('<!--')[0])
 			nodes = dom.getElementsByTagName('update')
@@ -80,7 +78,8 @@ class UserCreationForm(forms.ModelForm):
 		
 		"""
 		
-		new_user = User(username=self.cleaned_data['username'], password=self.cleaned_data['password1'], email=self.cleaned_data['email'], last_updated=self.last_updated)
+		new_user = User(username=self.cleaned_data['username'], email=self.cleaned_data['email'], last_updated=self.last_updated)
+		new_user.set_password(self.cleaned_data['password1'])
 		#new_delicious_account = DeliciousAccount(user = users.get_current_user(), username=self.cleaned_data['username'], password=self.cleaned_data['password1'])
 		#self.instance = new_delicious_account
 		return new_user
