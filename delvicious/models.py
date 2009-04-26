@@ -1,5 +1,11 @@
 from google.appengine.ext import db
 from django.contrib.auth.models import User
+from ragendja.auth.models import EmailUser
+
+class User(EmailUser):
+    first_name = db.StringProperty()
+    last_name = db.StringProperty()
+#last_updated = db.DateTimeProperty()
 
 class DeliciousAccount(db.Model):
 	user = db.UserProperty()
