@@ -7,8 +7,11 @@ urlpatterns = patterns('',
     
     (r'^fetch_bookmarks/$', 'delvicious.views.fetch_bookmarks'),
     (r'^add_delicious_account/$', 'delvicious.views.add_delicious_account'),
+    
+    (r'^annotations/(?P<username>\w+)\.xml$', 'delvicious.views.serve_xml'),   
+    (r'^csespec/(?P<username>\w+)\.xml$', 'delvicious.views.serve_csespec'),
+    
     (r'^search/$', 'delvicious.views.search'),
-    (r'^annotations/(?P<username>\w+)\.xml$', 'delvicious.views.serveXML'),
     
     # Override the default registration form
   #  url(r'^account/register/$', 'registration.views.register',

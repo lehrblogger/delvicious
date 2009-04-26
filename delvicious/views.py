@@ -16,10 +16,17 @@ from delvicious.models import DeliciousAccount, Link
 from google.appengine.api import users
 
 
-def serveXML(request, username):
+def serve_csespec(request, username):
 	daccounts = DeliciousAccount.gql("WHERE username = :1 ", username)
 	for curdaccounts in daccounts:
-		return render_to_response('delvicious/annotations.html', {'links': Link.gql("WHERE user = :1 ", curdaccounts.user)})
+		return render_to_response('delvicious/csespec.html', {'username': username})
+		
+	return render_to_response('delvicious/text.html', {'text': curuser.user})
+	
+def serve_xml(request, username):
+	daccounts = DeliciousAccount.gql("WHERE username = :1 ", username)
+	for curdaccounts in daccounts:
+		return render_to_response('delvicious/annotations.html', {'links': Link.gql("WHERE user = :1 ", curdaccounts.user), 'username': username})
 		
 	return render_to_response('delvicious/text.html', {'text': curuser.user})
 
@@ -83,8 +90,15 @@ def create_new_user(request):
     
 #@login_required
 def search(request):
-	return object_list(request, DeliciousAccount.all())
-	#return render_to_response('delvicious/search.html')
+	curuser = users.get_current_user()
+	if curuser:
+		delicious_login = DeliciousAccount.gql("WHERE user = :user", user=curuser).get()
+		if delicious_login:
+			return render_to_response('delvicious/search.html', {'username': delicious_login.username})
+		else:
+			return render_to_response('delvicious/text.html', {'text': 'no delicious user'})
+	else:
+		return render_to_response('delvicious/text.html', {'text': 'no user'})
 	
 
 #maybe not two of this line?

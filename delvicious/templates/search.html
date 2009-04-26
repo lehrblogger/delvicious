@@ -2,12 +2,17 @@
 <head>
 </head>
 <body>
-<div>
-	[search box here]
-  
-	{% for object in object_list %}
-		<p>{{object.user.username}}: {{object.username | object.password}}</p>
-	{% endfor %}
-</div>
+
+<!-- Google CSE Search Box Begins  -->
+<!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+<!-- The terms of service are available at http://www.google.com/coop/docs/cse/tos.html -->
+<form id="cref" action="http://www.google.com/cse">
+  <input type="hidden" name="cref" value="http://delv-icio-us.appspot.com/delvicious/csespec/{{ username }}.xml" />
+  <input type="text" name="q" size="40" />
+  <input type="submit" name="sa" value="Search" />
+</form>
+<script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cref"></script>
+<!-- Google CSE Search Box Ends -->
+
 </body>
 </html>
