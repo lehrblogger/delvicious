@@ -9,7 +9,13 @@
     <br/>
 	First, <a href="/delvicious/add_delicious_account/">add a Delicious account</a><br/>
   {% else %}
-    <a href="{% google_login_url request.get_full_path %}">Login</a> with your Google account and then add a Delicious account.
+    <a href="/delvicious/signup">Signup</a> with your Delicious username and password.
+    <br/>
+    <br/>
+    <a href="/delvicious/login">Login</a> if you've already signed up.
+    <br/>
+    <br/>
+    <a href="">Request</a> a password reset link if you've changed your Delicious password.
   {% endif %}
 </div>
 {% endblock %}
