@@ -5,3 +5,12 @@ Test with the following username : password pairs -
 Use this URL to quickly get Delicious searches for side-by-side searching
 	http://delicious.com/search?p=TERM&u=USER&chk=&context=userposts&fr=del_icio_us&lc=1
 Note that in the future, Delvicious will also leverage Delicious tags, and this should improve search results (and catch many of the results that Delicious gets but Delvicious doesn't). That URL might also be useful for side-by-side results, but scraping that (with Beautiful Soup?) and generating the HTML is too much work for now.
+
+Because the documentation for the Delicious API is impossible to find on their page - 
+	http://delicious.com/help/api
+	http://delicious.com/help/tools
+
+Related Sites -
+	ahh similar name: http://devicious.com/
+	very similar idea: http://lenzcape.com/ (overly complex, lack of integration with other tools is critical)
+	also similar, and on GAE(!) but static http://appgallery.appspot.com/about_app?app_id=agphcHBnYWxsZXJ5chQLEgxBcHBsaWNhdGlvbnMY54wBDA
