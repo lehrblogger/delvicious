@@ -4,4 +4,4 @@ Test with the following username : password pairs -
 
 Use this URL to quickly get Delicious searches for side-by-side searching
 	http://delicious.com/search?p=TERM&u=USER&chk=&context=userposts&fr=del_icio_us&lc=1
-Note that in the future, Delvicious will also leverage Delicious tags, and this should improve search results (and catch many of the results that Delicious gets but it doesn't). That URL might also be useful for side-by-side results, but scraping that (with Beautiful Soup?) and generating the HTML is too much work for now
+Note that in the future, Delvicious will also leverage Delicious tags, and this should improve search results (and catch many of the results that Delicious gets but Delvicious doesn't). That URL might also be useful for side-by-side results, but scraping that (with Beautiful Soup?) and generating the HTML is too much work for now.
