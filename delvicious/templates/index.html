@@ -9,19 +9,33 @@
     <br/>
   	{% if user.has_bookmarks %}
   		You have {{ user.count_bookmarks }} bookmarks that you can search!
-  		<br/>
+		<br/>
 		<!-- Google CSE Search Box Begins  -->
 		<!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
 		<!-- The terms of service are available at http://www.google.com/coop/docs/cse/tos.html -->
-		<form id="cref" action="http://www.google.com/cse">
-		  <input type="hidden" name="cref" value="http://delv-icio-us.appspot.com/delvicious/csespec/{{ user.username }}.xml" />
-		  <input type="text" name="q" size="40" />
-		  <input type="submit" name="sa" value="Search" />
+		<form id="cref_iframe" action="http://delv-icio-us.appspot.com/delvicious/">
+			<input type="hidden" name="cref" value="http://delv-icio-us.appspot.com/delvicious/csespec/{{ user.username }}.xml" />
+			<input type="hidden" name="cof" value="FORID:9" />
+			<input type="text" name="q" size="40" />
+			<input type="submit" name="sa" value="Search" />
 		</form>
-		<script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cref"></script>
+		<script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cref_iframe"></script>
 		<!-- Google CSE Search Box Ends -->
+		<br/>
+		<br/>
+		
+		<div id="cse-search-results"></div>
+		<script type="text/javascript">
+			var googleSearchIframeName = "cse-search-results";
+			var googleSearchFormName = "cse-search-box";
+			var googleSearchFrameWidth = 600;
+			var googleSearchDomain = "www.google.com";
+			var googleSearchPath = "/cse";
+		</script>
+		<script type="text/javascript" src="http://www.google.com/afsonline/show_afs_search.js"></script>
+
 	{% else %}
-  		You don't have any bookmarks to search. Why don't you go <a href="/delvicious/fetch_bookmarks">fetch them</a>?
+  		You don't have any bookmarks to search. Why don't you go <a href="/delvicious/fetch_bookmarks">fetch them</a>? (Be patient, more bookmarks will take longer.)
   	{% endif %}
   {% else %}
     <a href="/delvicious/signup">Signup</a> with your Delicious username and password.

@@ -21,17 +21,16 @@ from delvicious.models import User, Link
 
 
 def serve_csespec(request, username):
-	users = User.gql("WHERE username = :1 ", username)
-	if len(users) > 0:
-		return render_to_response('delvicious/csespec.html', {'username': username})
-	else:
-		return render_to_response('delvicious/text.html', {'text': 'No current user'})
+	q = User.all()
+	q.filter('username =', username)
+	if q.count() > 0:
+		return render_to_response('delvicious/csespec.xml', {'username': username})
 	
 def serve_xml(request, username):
-	#TODO fix the length > 0
-	users = User.gql("WHERE username = :1 ", username)
-	if len(users) > 0:
-		return render_to_response('delvicious/annotations.html', {'links': Link.gql("WHERE user = :1 ", user[0]), 'username': username})
+	q = User.all()
+	q.filter('username =', username)
+	if q.count() > 0:
+		return render_to_response('delvicious/annotations.xml', {'links': Link.gql("WHERE username = :1 ", username), 'username': username})
 
 def create_new_user(request):
     form = UserCreationForm()

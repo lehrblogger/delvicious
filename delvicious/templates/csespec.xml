@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<GoogleCustomizations>
+	<CustomSearchEngine>
+		<Title>{{ username }}&apos;s bookmark search</Title>
+		<Description>A search of all and only those sites bookmarked by {{ username }} on del.icio.us</Description>
+		<Context>
+			<BackgroundLabels>
+				<Label name="_cse_delvicious_{{ username }}" mode="FILTER" />
+			</BackgroundLabels>
+  		</Context>
+  		<LookAndFeel nonprofit="false" />
+	</CustomSearchEngine>
+    <Include type="Annotations" href="http://delv-icio-us.appspot.com/delvicious/annotations/{{ username }}.xml"/>
+</GoogleCustomizations>

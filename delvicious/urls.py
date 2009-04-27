@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     
     (r'^fetch_bookmarks/$', 'delvicious.views.fetch_bookmarks'),
     
-    (r'^annotations/(?P<username>\w+)\.xml$', 'delvicious.views.serve_xml'),   
+    (r'^annotations/(?P<username>\w+)\.xml$', 'delvicious.views.serve_xml'),
     (r'^csespec/(?P<username>\w+)\.xml$', 'delvicious.views.serve_csespec'),
     
     (r'^search/$', 'delvicious.views.search'),

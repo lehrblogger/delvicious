@@ -13,13 +13,6 @@ class User(User):
 	def has_bookmarks(self):
 		return self.count_bookmarks() > 0
 
-# 
-#     def get_username(self):
-#     	 return self.username
-# 
-#     def get_password(self):
-#     	 return self.password
-
 class Link(db.Model):
 	#user = db.ReferenceProperty(User, collection_name='user_links')
 	username = db.StringProperty()
