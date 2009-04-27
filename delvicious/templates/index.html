@@ -1,10 +1,10 @@
-{% extends "base.html" %}
+{% extends "delvicious/project_base.html" %}
 
 {% block title %}
 Main
 {% endblock %}
 
-{% block content %}
+{% block more-content %}
 <div class="login">
   {% if user.is_authenticated %}
     Welcome, {{ user.username }}
