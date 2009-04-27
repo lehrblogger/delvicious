@@ -4,10 +4,25 @@
 <div class="login">
   {% if user.is_authenticated %}
     Welcome, {{ user.username }}
-    (<a href="{% google_logout_url "/delvicious/" %}">Logout</a>)
+    (<a href="/delvicious/logout">Logout</a>)
     <br/>
-    <br/>s
-	Search
+    <br/>
+  	{% if user.has_bookmarks %}
+  		You have bookmarks that you can search!
+  		<br/>
+		<!-- Google CSE Search Box Begins  -->
+		<!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+		<!-- The terms of service are available at http://www.google.com/coop/docs/cse/tos.html -->
+		<form id="cref" action="http://www.google.com/cse">
+		  <input type="hidden" name="cref" value="http://delv-icio-us.appspot.com/delvicious/csespec/{{ user.username }}.xml" />
+		  <input type="text" name="q" size="40" />
+		  <input type="submit" name="sa" value="Search" />
+		</form>
+		<script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cref"></script>
+		<!-- Google CSE Search Box Ends -->
+	{% else %}
+  		You don't have any bookmarks to search. Why don't you go <a href="/delvicious/fetch_bookmarks">fetch them</a>?
+  	{% endif %}
   {% else %}
     <a href="/delvicious/signup">Signup</a> with your Delicious username and password.
     <br/>

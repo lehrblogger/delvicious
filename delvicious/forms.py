@@ -96,20 +96,5 @@ class UserCreationForm(forms.ModelForm):
 		
 		"""
 		new_user = User.objects.create_user(self.cleaned_data['username'], self.cleaned_data['email'], self.cleaned_data['password1'])
+		new_user.last_updated = self.last_updated
 		return new_user
-		# 		
-		# 		new_user = RegistrationProfile.objects.create_inactive_user(
-		# 				username=self.cleaned_data['username'],
-		# 				email=self.cleaned_data['email'],
-		# 				password = self.cleaned_data['password1'],
-		# 				domain_override=domain_override)
-		#self.instance = new_user
-		#return super(UserRegistrationForm, self).save()
-        
-		# 		new_user = RegistrationProfile.objects.create_inactive_user(username=self.cleaned_data['username'],
-		# 																	email=self.cleaned_data['email'],
-		# 																	last_updated=self.last_updated)
-		
-		#new_user = User(username=self.cleaned_data['username'], email=self.cleaned_data['email'], last_updated=self.last_updated)
-		#new_user.set_password(self.cleaned_data['password1'])
-		#return new_user

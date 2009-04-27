@@ -9,7 +9,9 @@ from django.contrib.auth.models import check_password
 from django.views.generic.list_detail import object_list
 from django.views.generic.create_update import create_object
 from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.template import Context, loader
+
 
 from google.appengine.api import users, urlfetch
 from google.appengine.ext import db
@@ -20,14 +22,15 @@ from delvicious.models import User, Link
 
 def serve_csespec(request, username):
 	users = User.gql("WHERE username = :1 ", username)
-	if users.length > 0:
+	if len(users) > 0:
 		return render_to_response('delvicious/csespec.html', {'username': username})
 	else:
 		return render_to_response('delvicious/text.html', {'text': 'No current user'})
 	
 def serve_xml(request, username):
+	#TODO fix the length > 0
 	users = User.gql("WHERE username = :1 ", username)
-	if users.length > 0:
+	if len(users) > 0:
 		return render_to_response('delvicious/annotations.html', {'links': Link.gql("WHERE user = :1 ", user[0]), 'username': username})
 
 def create_new_user(request):
@@ -36,12 +39,12 @@ def create_new_user(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            #user = form.instance
-            # user must be active for login to work
-            user.is_active = True
-            user.put()
-            return HttpResponseRedirect('/delvicious/')
+			user = form.save()
+			user.is_active = True
+			user.put()
+			#TODO Authenticate first?
+			login(request, user)
+			return HttpResponseRedirect('/delvicious/')
     return render_to_response('delvicious/user_create_form.html', {'form': form})
 
 def login_user(request):
@@ -50,22 +53,23 @@ def login_user(request):
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
-			#query = User.gql("WHERE username = :1 ", request.POST['username'])
-			#stored_password = query.get().password
-			#return render_to_response('delvicious/text.html', {'text': request.POST['username'] + "  " + request.POST['password']})
-   			#if check_password(request.POST['password'], stored_password):	#form checks for valid user
 			user = authenticate(username=request.POST['username'], password=request.POST['password'])
 			if user is not None:
 				if user.is_active:
 					login(request, user)
-					return render_to_response('delvicious/text.html', {'text': 'login success'})
-					#TODO update on login, this is why i need to do manually
+					return HttpResponseRedirect('/delvicious/')
     return render_to_response('delvicious/user_login_form.html', {'form': form})
+ 
+def main(request):
+	curuser = request.user
+	return render_to_response('delvicious/text.html', {'text': curuser.has_bookmarks()})
+	return render_to_response('delvicious/index.html', {'user': curuser})
 
 @login_required
 def fetch_bookmarks(request):
-	curuser = users.get_current_user()
-	if curuser:
+	curuser = request.user
+	#curuser = users.get_current_user()
+	if curuser.is_authenticated():
 		bookmarks = searchHTTP(curuser.username, curuser.password)
 		for bookmark in bookmarks:
 			query =  Link.all()
@@ -76,11 +80,10 @@ def fetch_bookmarks(request):
 				b.url = bookmark.getAttribute('href').replace('&', '&amp;')
 				b.title = bookmark.getAttribute('description')
 				b.put()
-		return render_to_response('delvicious/link_user.html', {'user': curuser, 'links': Link.gql("WHERE user = :1 ", curuser)})
+		return HttpResponseRedirect('/delvicious/')
 	else:
 		return render_to_response('delvicious/text.html', {'text': 'no user'})
 
-@login_required
 def searchHTTP (username, password):
 	res = urlfetch.fetch('https://api.del.icio.us/v1/posts/all', 
  						 headers={'Authorization': 'Basic ' + base64.b64encode(username + ":" + password)},
@@ -91,11 +94,3 @@ def searchHTTP (username, password):
 	else:
 		dom = parseString(res.content.partition('<!--')[0])
 		return dom.getElementsByTagName('post')
-
-#@login_required
-def search(request):
-	curuser = users.get_current_user()
-	if curuser:
-		return render_to_response('delvicious/search.html', {'username': curuser.username})
-	else:
-		return render_to_response('delvicious/text.html', {'text': 'no user'})
