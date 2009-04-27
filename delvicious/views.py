@@ -17,7 +17,7 @@ from google.appengine.api import users, urlfetch
 from google.appengine.ext import db
 
 from delvicious.forms import UserCreationForm, UserLoginForm
-from delvicious.models import User, Link
+from delvicious.models import User, Link, Tag
 
 
 def serve_csespec(request, username):
@@ -41,8 +41,6 @@ def create_new_user(request):
 			user = form.save()
 			user.is_active = True
 			user.put()
-			#TODO Authenticate first?
-			#login(request, user)
 			return HttpResponseRedirect('/delvicious/')
     return render_to_response('delvicious/user_create_form.html', {'form': form})
 
@@ -61,7 +59,6 @@ def login_user(request):
  
 def main(request):
 	curuser = request.user
-	#return render_to_response('delvicious/text.html', {'text': curuser.has_bookmarks()})
 	return render_to_response('delvicious/index.html', {'user': curuser})
 
 @login_required
@@ -81,7 +78,6 @@ def fetch_bookmarks(request):
 					b.url = bookmark.getAttribute('href').replace('&', '&amp;')
 					b.title = bookmark.getAttribute('description')
 					b.put()
-			#return render_to_response('delvicious/link_list.html', {'object_list': Link.all()})		
 			return HttpResponseRedirect('/delvicious/')
 		else:
 			return render_to_response('delvicious/text.html', {'text': 'no bookmarks for ' + curuser.username + ' with password=' + curuser.unhashed_password + '___'})
@@ -98,3 +94,25 @@ def search_http(username, password):
 	else:
 		dom = parseString(res.content.partition('<!--')[0])
 		return dom.getElementsByTagName('post')
+
+def empty_datastore(request):
+
+	query = User.all()
+	while query.count() > 0:
+		results = query.fetch(500)
+		db.delete(results)
+		query = User.all()
+
+	query = Link.all()
+	while query.count() > 0:
+		results = query.fetch(500)
+		db.delete(results)
+		query = Link.all()
+
+	query = Tag.all()
+	while query.count() > 0:
+		results = query.fetch(500)
+		db.delete(results)
+		query = Tag.all()
+	
+	return HttpResponseRedirect('/delvicious/')

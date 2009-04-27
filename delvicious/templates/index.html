@@ -1,6 +1,10 @@
-{% extends "delvicious/base_user.html" %}
+{% extends "base.html" %}
 
-{% block welcome %}
+{% block title %}
+Main
+{% endblock %}
+
+{% block content %}
 <div class="login">
   {% if user.is_authenticated %}
     Welcome, {{ user.username }}
@@ -38,19 +42,13 @@
   		You don't have any bookmarks to search. Why don't you go <a href="/delvicious/fetch_bookmarks">fetch them</a>? (Be patient, more bookmarks will take longer.)
   	{% endif %}
   {% else %}
-    <a href="/delvicious/signup">Signup</a> with your Delicious username and password.
+    <a href="/delvicious/signup">Signup</a> with your Delicious username and password (note that this won't login automatically).
     <br/>
     <br/>
     <a href="/delvicious/login">Login</a> if you've already signed up.
     <br/>
     <br/>
-    <a href="">Request</a> a password reset link if you've changed your Delicious password.
+    <u>Request</u> a password reset link if you've changed your Delicious password.
   {% endif %}
 </div>
 {% endblock %}
-
-{% block links %}
-
-
-{% endblock %}
-

@@ -12,5 +12,5 @@ urlpatterns = patterns('',
     (r'^annotations/(?P<username>\w+)\.xml$', 'delvicious.views.serve_xml'),
     (r'^csespec/(?P<username>\w+)\.xml$', 'delvicious.views.serve_csespec'),
     
-    (r'^search/$', 'delvicious.views.search'),
+    (r'^empty_datastore/$', 'delvicious.views.empty_datastore'), #dangerous! remove to deploy
 )
