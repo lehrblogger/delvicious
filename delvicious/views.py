@@ -43,7 +43,7 @@ def create_new_user(request):
 			user.is_active = True
 			user.put()
 			#TODO Authenticate first?
-			login(request, user)
+			#login(request, user)
 			return HttpResponseRedirect('/delvicious/')
     return render_to_response('delvicious/user_create_form.html', {'form': form})
 
@@ -62,7 +62,7 @@ def login_user(request):
  
 def main(request):
 	curuser = request.user
-	return render_to_response('delvicious/text.html', {'text': curuser.has_bookmarks()})
+	#return render_to_response('delvicious/text.html', {'text': curuser.has_bookmarks()})
 	return render_to_response('delvicious/index.html', {'user': curuser})
 
 @login_required
@@ -70,27 +70,32 @@ def fetch_bookmarks(request):
 	curuser = request.user
 	#curuser = users.get_current_user()
 	if curuser.is_authenticated():
-		bookmarks = searchHTTP(curuser.username, curuser.password)
-		for bookmark in bookmarks:
-			query =  Link.all()
-			query.filter('user =', curuser)
-			query.filter('url =', bookmark.getAttribute('href').replace('&', '&amp;'))
-			if not query:
-				b = Link(user = curuser)
-				b.url = bookmark.getAttribute('href').replace('&', '&amp;')
-				b.title = bookmark.getAttribute('description')
-				b.put()
-		return HttpResponseRedirect('/delvicious/')
+		bookmarks = search_http(curuser.username, curuser.unhashed_password)
+		if len(bookmarks) > 0:
+			for bookmark in bookmarks:
+				query =  Link.all()
+				query.filter('username =', curuser.username)
+				query.filter('url =', bookmark.getAttribute('href').replace('&', '&amp;'))
+				if not query:
+					b = Link()
+					b.username = curuser.username
+					b.url = bookmark.getAttribute('href').replace('&', '&amp;')
+					b.title = bookmark.getAttribute('description')
+					b.put()
+			#return render_to_response('delvicious/link_list.html', {'object_list': Link.all()})		
+			return HttpResponseRedirect('/delvicious/')
+		else:
+			return render_to_response('delvicious/text.html', {'text': 'no bookmarks for ' + curuser.username + ' with password=' + curuser.unhashed_password + '___'})
 	else:
 		return render_to_response('delvicious/text.html', {'text': 'no user'})
 
-def searchHTTP (username, password):
+def search_http(username, password):
 	res = urlfetch.fetch('https://api.del.icio.us/v1/posts/all', 
  						 headers={'Authorization': 'Basic ' + base64.b64encode(username + ":" + password)},
  						 allow_truncated=True)
 	#res = urlfetch.fetch('http://lehrblogger.com/nyu/classes/spring09/a2z/midterm/testing.xml')
 	if res.content.find('Sorry, Unable to process request at this time -- error 999.') != -1:
-		return
+		return #TODO make this work? render_to_response('delvicious/text.html', {'text': 'rate limit hit for ' + curuser.username})
 	else:
 		dom = parseString(res.content.partition('<!--')[0])
 		return dom.getElementsByTagName('post')

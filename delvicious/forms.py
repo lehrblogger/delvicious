@@ -50,8 +50,10 @@ class UserCreationForm(forms.ModelForm):
 		Validate that the username is alphanumeric and is not already in use.
 		
 		"""
-		new_user = User.get_by_key_name("key_"+self.cleaned_data['username'].lower())
-		if new_user:# and new_delicious_account.is_active:
+		q = User.all()
+		q.filter('user =', self.cleaned_data['username'].lower())
+		
+		if q.count() > 0:
 			raise forms.ValidationError(__(u'That Delicious account is already signed up for Delvicious. Please login or choose another.'))
 		return self.cleaned_data['username']
 
@@ -96,5 +98,6 @@ class UserCreationForm(forms.ModelForm):
 		
 		"""
 		new_user = User.objects.create_user(self.cleaned_data['username'], self.cleaned_data['email'], self.cleaned_data['password1'])
+		new_user.unhashed_password = self.cleaned_data['password1']
 		new_user.last_updated = self.last_updated
 		return new_user

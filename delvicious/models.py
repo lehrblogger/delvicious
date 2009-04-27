@@ -2,12 +2,17 @@ from google.appengine.ext import db
 from ragendja.auth.models import User
 
 class User(User):
-    last_updated = db.DateTimeProperty()
-    
-    def has_bookmarks(self):
-    	q = Link.all()
-    	#q.filter("WHERE user = :1 ", self)
-    	return q.count() > 0
+	unhashed_password = db.StringProperty()
+	last_updated = db.DateTimeProperty()
+
+	def count_bookmarks(self):
+		q = Link.all()
+		q.filter('username =', self.username)
+		return q.count()
+	
+	def has_bookmarks(self):
+		return self.count_bookmarks() > 0
+
 # 
 #     def get_username(self):
 #     	 return self.username
@@ -17,7 +22,7 @@ class User(User):
 
 class Link(db.Model):
 	#user = db.ReferenceProperty(User, collection_name='user_links')
-	user = db.UserProperty()
+	username = db.StringProperty()
 	url = db.StringProperty()
 	title = db.StringProperty()
 
